@@ -1,25 +1,23 @@
 #!/bin/bash
 
 if [[ -z "${PASSWORD}" ]]; then
-  export PASSWORD="5c301bb8-6c77-41a0-a606-4ba11bbab084"
+  echo "Password not set" >&2
+  exit 1
 fi
 echo ${PASSWORD}
 
 export PASSWORD_JSON="$(echo -n "$PASSWORD" | jq -Rc)"
 
 if [[ -z "${ENCRYPT}" ]]; then
-  export ENCRYPT="chacha20-ietf-poly1305"
+  echo "Encryption method not set" >&2
+  exit 1
 fi
 
 if [[ -z "${V2_Path}" ]]; then
-  export V2_Path="s233"
+  echo "V2 path was not generated" >&2
+  exit 1
 fi
 echo ${V2_Path}
-
-if [[ -z "${QR_Path}" ]]; then
-  export QR_Path="/qr_img"
-fi
-echo ${QR_Path}
 
 case "$AppName" in
 	*.*)
@@ -30,24 +28,33 @@ case "$AppName" in
 		;;
 esac
 
-bash /conf/shadowsocks-libev_config.json >  /etc/shadowsocks-libev/config.json
+bash /conf/shadowsocks-libev_config.sh > /etc/shadowsocks-libev/config.json
 echo /etc/shadowsocks-libev/config.json
 cat /etc/shadowsocks-libev/config.json
 
-bash /conf/nginx_ss.conf > /etc/nginx/conf.d/ss.conf
+bash /conf/nginx_ss.sh > /etc/nginx/conf.d/ss.conf
 echo /etc/nginx/conf.d/ss.conf
 cat /etc/nginx/conf.d/ss.conf
 
+PLUGIN=$(echo -n "v2ray;path=/${V2_Path};host=${DOMAIN};tls" | sed -e 's/\//%2F/g' -e 's/=/%3D/g' -e 's/;/%3B/g')
+SS="ss://$(echo -n ${ENCRYPT}:${PASSWORD} | base64 -w 0)@${DOMAIN}:443?plugin=${PLUGIN}"
+QR_CLI=$(qrencode -s 3 -t UTF8 "$SS")
+IP=$(curl -s https://json.myip.wtf 2>/dev/null)
+NOW=$( date '+%F_%H:%M:%S' )
+TG_MESSAGE="
+$NOW
+---
+$SS
+---
+$IP
+"
 
-if [ "$AppName" = "no" ]; then
-  echo "Do not generate QR-code"
-else
-  [ ! -d /wwwroot/${QR_Path} ] && mkdir /wwwroot/${QR_Path}
-  plugin=$(echo -n "v2ray;path=/${V2_Path};host=${DOMAIN};tls" | sed -e 's/\//%2F/g' -e 's/=/%3D/g' -e 's/;/%3B/g')
-  ss="ss://$(echo -n ${ENCRYPT}:${PASSWORD} | base64 -w 0)@${DOMAIN}:443?plugin=${plugin}" 
-  echo "${ss}" | tr -d '\n' > /wwwroot/${QR_Path}/index.html
-  echo -n "${ss}" | qrencode -s 6 -o /wwwroot/${QR_Path}/vpn.png
-fi
+echo "$QR_CLI"
+echo "$IP"
+echo "$SS"
+
+curl -s -X POST -H "Content-Type:multipart/form-data" -F chat_id="$TG_CHAT_ID" -F text="$TG_MESSAGE" "https://api.telegram.org/bot$TG_BOT_TOKEN/sendMessage" > /dev/null
+qrencode -s 6 -o - "$SS" | curl -s -X POST -H "Content-Type:multipart/form-data" -F photo=@- "https://api.telegram.org/bot$TG_BOT_TOKEN/sendPhoto?chat_id=$TG_CHAT_ID" > /dev/null
 
 ss-server -c /etc/shadowsocks-libev/config.json &
 rm -rf /etc/nginx/sites-enabled/default
