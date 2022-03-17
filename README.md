@@ -12,7 +12,9 @@
 curl https://api.telegram.org/bot<TO:KEN>/getUpdates | grep -Po '"from":{"id":.+?,'
 ```
 
-4. Open url below, replace ACC_NAME and REPO_NAME with your own
+4. **Fork this repo or** <b><ins>better download zip and upload to new empty github account</ins></b>
+
+5. Open url below, replace ACC_NAME and REPO_NAME with your own
 
 ```
 https://heroku.com/deploy?template=https://github.com/ACC_NAME/REPO_NAME/tree/main
@@ -20,13 +22,12 @@ https://heroku.com/deploy?template=https://github.com/ACC_NAME/REPO_NAME/tree/ma
 
 For this repo it will be
 
-###### please don't use this repo
-
 ```
 https://heroku.com/deploy?template=https://github.com/SanariSan/sharoku/tree/main
 ```
+<b><ins>please don't use this repo directly<b><ins>
 
-5. Fill in all required fields, for example
+6. Fill in all required fields, for example
 
 ```
 AppName - super-secret-name
@@ -36,13 +37,13 @@ TG_BOT_TOKEN - token_from:step_1
 TG_CHAT_ID - id_from_step_3
 ```
 
-6. Click `Deploy app`
+7. Click `Deploy app`
 
-7. Wait for connection information to come to you from bot in telegram
+8. Wait for connection information to come to you from bot in telegram
 
-8. Open your shadowsocks app with V2Ray plugin installed and scan `qr`/paste `ss` string
+9. Open your shadowsocks app with V2Ray plugin installed and scan `qr`/paste `ss` string
 
-9. Stop and block bot, otherwise it will send you same info on each vps dyno startup
+10. Stop and block bot, otherwise it will send you same info on each vps dyno startup
 
 ---
 
