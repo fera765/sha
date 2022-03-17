@@ -47,6 +47,8 @@ TG_CHAT_ID - id_from_step_3
 
 ---
 
+#### Looking for bare manual shadowsocks installation?
+##### Check out [this gist](https://gist.github.com/SanariSan/d10acea7107e28a4caf8b8c195d92583)
+  
 #### Looking for some examples on curl bot interaction?
-
-#### Check out [this gist](https://gist.github.com/SanariSan/4c7cca1aef10dfe0e27e55cfd97e9a53)
+##### Check out [this gist](https://gist.github.com/SanariSan/4c7cca1aef10dfe0e27e55cfd97e9a53)
