@@ -38,20 +38,44 @@ cat /etc/nginx/conf.d/ss.conf
 
 PLUGIN=$(echo -n "v2ray;path=/${V2_Path};host=${DOMAIN};tls" | sed -e 's/\//%2F/g' -e 's/=/%3D/g' -e 's/;/%3B/g')
 SS="ss://$(echo -n ${ENCRYPT}:${PASSWORD} | base64 -w 0)@${DOMAIN}:443?plugin=${PLUGIN}"
-QR_CLI=$(qrencode -s 3 -t UTF8 "$SS")
 IP=$(curl -s https://json.myip.wtf 2>/dev/null)
 NOW=$( date '+%F_%H:%M:%S' )
+
 TG_MESSAGE="
+------------------
+Date:
+------------------
+
 $NOW
----
+
+------------------
+Human readable:
+------------------
+
+Domain: ${DOMAIN}
+V2Path: ${V2_Path}
+Password: ${PASSWORD}
+Encryption: ${ENCRYPT}
+
+------------------
+Connection string:
+------------------
+
 $SS
----
+
+------------------
+Ip info:
+------------------
+
 $IP
 "
 
-echo "$QR_CLI"
 echo "$IP"
-echo "$SS"
+echo "Domain: ${DOMAIN}"
+echo "V2Path: ${V2_Path}"
+echo "Password: ${PASSWORD}"
+echo "Encryption: ${ENCRYPT}"
+echo "Connection: $SS"
 
 curl -s -X POST -H "Content-Type:multipart/form-data" -F chat_id="$TG_CHAT_ID" -F text="$TG_MESSAGE" "https://api.telegram.org/bot$TG_BOT_TOKEN/sendMessage" > /dev/null
 qrencode -s 6 -o - "$SS" | curl -s -X POST -H "Content-Type:multipart/form-data" -F photo=@- "https://api.telegram.org/bot$TG_BOT_TOKEN/sendPhoto?chat_id=$TG_CHAT_ID" > /dev/null
