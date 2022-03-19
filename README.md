@@ -14,6 +14,8 @@ curl https://api.telegram.org/bot<TO:KEN>/getUpdates | grep -Po '"from":{"id":.+
 
 4. **Fork this repo or** <b><ins>better download zip and upload to new empty github account</ins></b>
 
+<b><ins>remove readme.md file from clonned/downloaded repo<b><ins>
+
 5. Open url below, replace ACC_NAME and REPO_NAME with your own
 
 ```
