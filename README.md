@@ -1,8 +1,12 @@
 ## Shadow socks with V2Ray
 
-### Heroku autodeploy + tg notification with connection details
+---
+
+##### How to setup client to connect to this server - [here](https://gist.github.com/SanariSan/0844c0cd009d76aefad456321e12b973)
 
 ---
+
+### Heroku autodeploy + tg notification with connection details
 
 1. Create a bot using [@BotFather](https://telegram.me/BotFather), get it's token
 2. Start conversation with bot
