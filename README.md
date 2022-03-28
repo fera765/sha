@@ -23,13 +23,13 @@ curl https://api.telegram.org/bot<TO:KEN>/getUpdates | grep -Po '"from":{"id":.+
 5. Open url below, replace ACC_NAME and REPO_NAME with your own
 
 ```
-https://heroku.com/deploy?template=https://github.com/ACC_NAME/REPO_NAME/tree/main
+https://heroku.com/deploy?template=https://github.com/ACC_NAME/REPO_NAME
 ```
 
 For this repo it will be
 
 ```
-https://heroku.com/deploy?template=https://github.com/SanariSan/sharoku/tree/main
+https://heroku.com/deploy?template=https://github.com/SanariSan/sharoku
 ```
 <b><ins>please don't use this repo directly<b><ins>
 
